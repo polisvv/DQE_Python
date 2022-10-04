@@ -40,7 +40,7 @@ i = 0
 while i < len(last_sent):
     # delete symbols
     for word in last_sent[i]:
-        last_sent_list.append(''.join(symb for symb in word if symb not in '?:!/;'))
+        last_sent_list.append(''.join(symb for symb in word if symb not in '.?:!/;'))
     i = i + 1
 
 # create new final list
