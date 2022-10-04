@@ -1,3 +1,5 @@
+import re
+
 initial_text = r"""homEwork:
 	tHis iz your homeWork, copy these Text to variable. 
 
@@ -7,9 +9,9 @@ initial_text = r"""homEwork:
 
 	last iz TO calculate nuMber OF Whitespace characteRS in this Text. caREFULL, not only Spaces, but ALL whitespaces. I got 87.
 """
-import re
+
 # count whitespaces
-whitespace_cnt = re.findall(' ', initial_text) + re.findall('\t', initial_text) + re.findall('\n', initial_text)
+whitespace_cnt = re.findall('\s', initial_text)
 print('Number of whitespace characters is', len(whitespace_cnt))
 print('----------------')
 
@@ -22,38 +24,42 @@ split_by_enter = text_replace_iz.split('\n')
 paragraph_list = []
 # create an empty list for last sentence
 last_sent = []
-# split by dots (before this delete spaces after dots), delete tabs
-for i in split_by_enter:
-    i = i.replace('\t','').replace('. ','.').split('.')
-    paragraph_list.append(i)
+# split by dots
+for sentence in split_by_enter:
+    sentence = sentence.split('. ')
+    paragraph_list.append(sentence)
     # collect last words for last sentences
-    for j in i:
-        last_sent.append(j.split()[-1:])
-# delete empty elements (due to line between paragraphs)
-last_sent = [x for x in last_sent if x]
+    for word in sentence:
+        # skip empty entities
+        if len(word.split()[-1:]) > 0:
+            last_sent.append(word.split()[-1:])
 
 # collect lists of last words to one list
-ls = []
+last_sent_list = []
 i = 0
 while i < len(last_sent):
-    for j in last_sent[i]:
-        ls.append(j)
+    # delete symbols
+    for word in last_sent[i]:
+        last_sent_list.append(''.join(symb for symb in word if symb not in '?:!/;'))
     i = i + 1
 
 # create new final list
 corrected_list = []
-for i in paragraph_list:
+paragraph_cnt = 0
+for paragraph in paragraph_list:
     # create list to add sentences with capital letter for every paragraph
     list_cap = []
-    for j in i:
+    for sent in paragraph:
         # correct first letter
-        j = j.capitalize()
+        sent = sent.strip().capitalize()
         # add to the list
-        list_cap.append(j)
+        list_cap.append(sent)
     # add every paragraph to the final list
     corrected_list.append('. '.join(list_cap))
-# add last sentence to the final list
-corrected_list.append(' '.join(ls).capitalize()+'.')
+    # add last sentence to the final list (cnt started from 0, counted empty paragraphs)
+    if paragraph_cnt == 3:
+        corrected_list.append(' '.join(last_sent_list).capitalize()+'.')
+    paragraph_cnt = paragraph_cnt + 1
 # convert list to the text
 final_text = '\n\t'.join(corrected_list)
 print(final_text)
