@@ -11,19 +11,19 @@ initial_text = r"""homEwork:
 """
 
 
-def count_whitespaces_func(txt):
+def count_whitespaces(txt):
     whitespace_cnt = re.findall('\s', txt)
     return len(whitespace_cnt)
 
-def misspelling_func(incorrect_word, correct_word):
+def correct_misspelling(incorrect_word, correct_word):
     text_replace_iz = initial_text.lower().replace(' ' + incorrect_word + ' ', ' ' + correct_word + ' ')
     return text_replace_iz
 
-def last_words_func(txt):
+def collect_last_words(txt):
     last_word_list = re.findall('(\w+)[:.|!?…]', txt)
     return last_word_list
 
-def capitalize_append_sent_func(txt_list, paragraph_num):
+def capitalize_and_append_sent(txt_list, paragraph_num):
     paragraph_list = []                                             # create an empty list for last sentence
     for paragraph in txt_list:
         sentences = paragraph.split('. ')
@@ -42,10 +42,10 @@ def capitalize_append_sent_func(txt_list, paragraph_num):
     final_text = '\n\t'.join(corrected_list)                    # convert list to the text
     return final_text
 
-print('Number of whitespace characters is', count_whitespaces_func(initial_text))
+print('Number of whitespace characters is', count_whitespaces(initial_text))
 print('----------------')
-text_replace_iz = misspelling_func('iz', 'is')
-last_words_list = last_words_func(text_replace_iz)
+text_replace_iz = correct_misspelling('iz', 'is')
+last_words_list = collect_last_words(text_replace_iz)
 split_by_enter = text_replace_iz.split('\n')                    # split every paragraph
 
-print(capitalize_append_sent_func(split_by_enter, 3))
+print(capitalize_and_append_sent(split_by_enter, 3))
