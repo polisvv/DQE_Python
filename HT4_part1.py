@@ -8,7 +8,7 @@ def generate_random_dicts(dict_num_min,
                           key_num_max,
                           value_min,
                           value_max):
-    global list_of_dicts
+    # global list_of_dicts
     list_of_dicts = []
     for i in range(random.randint(dict_num_min, dict_num_max)):
         j = 1
@@ -34,7 +34,7 @@ def get_keys_list(dicts):
 
 def dict_sum(dict):
     new_dict = {}                                                               # create new dict for result
-    for key in get_keys_list(list_of_dicts):                                                    # checking all keys one by one
+    for key in get_keys_list(random_dict):                                                    # checking all keys one by one
         """checking every dict one by one
         if current key exists in current dict, add it to the list of values
         if not exists, add value -999 (to save correct index of dict)"""
@@ -51,7 +51,7 @@ def dict_sum(dict):
     return new_dict
 
 
-random_dict = generate_random_dicts(2, 10, 1, 28, 0, 100)
+random_dict = generate_random_dicts(dict_num_min=2, dict_num_max=10, key_num_min=1, key_num_max=28, value_min=0, value_max=100)
 print('------------------------------')
 print('Random dicts list generated:', random_dict)
 print('------------------------------')
