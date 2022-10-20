@@ -86,10 +86,8 @@ pub_list = []
 """ to input type of record """
 record_type = ['News', 'Advertising', 'Joke']
 print('Select type of new record:')
-# i = 0
 for num, record in enumerate(record_type):
     print(num, record)
-    # i = i + 1
 
 record_type_index = int(input(f'Select value between 0 and {len(record_type) - 1}: '))
 print('You selection is ', check_record_type(record_type_index))
