@@ -70,9 +70,9 @@ class Advertising(Publication):
             exit()
         return f'Actual until: {exp_date}, {date_diff.days} days left'
 
-    def write_to_list_ad(self):
-        pub_list.append(self.get_due_date)
-        return pub_list
+    def write_to_list_ad(self, publication_list):
+        publication_list.append(self.get_due_date)
+        return publication_list
 
 
 class Joke(Publication):
@@ -83,9 +83,9 @@ class Joke(Publication):
         value_list = ['One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten']
         return value_list[random.randint(0, 9)]
 
-    def write_to_list_joke(self):
-        pub_list.append(f'Funny meter – {self.generate_random_funny_meter()} of Ten')
-        return pub_list
+    def write_to_list_joke(self, publication_list):
+        publication_list.append(f'Funny meter – {self.generate_random_funny_meter()} of Ten')
+        return publication_list
 
 
 def check_record_type(input_index):
@@ -113,10 +113,10 @@ if record_type_index == 0:
     pub.write_to_list_news()
 elif record_type_index == 1:
     pub = Advertising(record_type[record_type_index])
-    pub.write_to_list_ad()
+    pub.write_to_list_ad(pub_list)
 elif record_type_index == 2:
     pub = Joke(record_type[record_type_index])
-    pub.write_to_list_joke()
+    pub.write_to_list_joke(pub_list)
 else:
     print('Something went wrong...')
 
