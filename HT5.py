@@ -10,15 +10,15 @@ class Publication:
         body = input('Type text: ')
         return body
 
-    def write_to_list(self):
-        pub_list.insert(0, pub.title)
-        pub_list.insert(1, self.get_publication_text())
-        return pub_list
+    def write_to_list(self, publication_list):
+        publication_list.insert(0, pub.title)
+        publication_list.insert(1, self.get_publication_text())
+        return publication_list
 
-    def write_to_file(self, l1):
+    def write_to_file(self, publicution_list):
         file = open('myfile.txt', 'a+')
         file.write('---------------------------------' + '\n')
-        file.write(f'{l1[0]}\n{l1[1]}\n{l1[2]}\n')
+        file.write(f'{publicution_list[0]}\n{publicution_list[1]}\n{publicution_list[2]}\n')
         file.write('---------------------------------' + '\n\n')
 
 
@@ -34,20 +34,34 @@ class News(Publication):
         location = input('Type city name: ')
         return location
 
-    def write_to_list_news(self):
-        pub_list.append(f'{inp_location}, {self.get_publish_date()}')
-        return pub_list
+    def write_to_list_news(self, publication_list):
+        publication_list.append(f'{inp_location}, {self.get_publish_date()}')
+        return publication_list
 
 
 class Advertising(Publication):
     def __init__(self, title):
         Publication.__init__(self, title=title)
 
+    @property
     def get_due_date(self):
         print('Type advertising expiration date')
-        exp_year = int(input('Enter a year: '))
-        exp_month = int(input('Enter a month: '))
-        exp_day = int(input('Enter a day: '))
+        # exp_year = int(input('Enter a year: '))
+        while True:
+            exp_year = int(input('Enter a year: '))
+            if 2020 < exp_year <= 2030:
+                break
+            print('Year must be between 2021 and 2030')
+        while True:
+            exp_month = int(input('Enter a month: '))
+            if 1 <= exp_month <= 12:
+                break
+            print('Month must be a number between 1 and 12')
+        while True:
+            exp_day = int(input('Enter a day: '))
+            if 1 <= exp_day <= 31:
+                break
+            print('Day must be a number between 1 and 31')
         exp_date = datetime.date(exp_year, exp_month, exp_day)
         print('Expiration date is ', exp_date)
         date_diff = datetime.date(exp_year, exp_month, exp_day) - datetime.date.today()
@@ -57,7 +71,7 @@ class Advertising(Publication):
         return f'Actual until: {exp_date}, {date_diff.days} days left'
 
     def write_to_list_ad(self):
-        pub_list.append(self.get_due_date())
+        pub_list.append(self.get_due_date)
         return pub_list
 
 
@@ -107,4 +121,4 @@ else:
     print('Something went wrong...')
 
 
-pub.write_to_file(pub.write_to_list())
+pub.write_to_file(pub.write_to_list(pub_list))
