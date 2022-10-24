@@ -34,8 +34,8 @@ class News(Publication):
         location = input('Type city name: ')
         return location
 
-    def write_to_list_news(self, publication_list):
-        publication_list.append(f'{inp_location}, {self.get_publish_date()}')
+    def write_to_list_news(self, publication_list, location):
+        publication_list.append(f'{location}, {self.get_publish_date()}')
         return publication_list
 
 
@@ -110,7 +110,7 @@ print('You selection is ', check_record_type(record_type_index))
 if record_type_index == 0:
     pub = News(record_type[record_type_index], datetime.datetime.now())
     inp_location = pub.get_news_location()
-    pub.write_to_list_news()
+    pub.write_to_list_news(pub_list, inp_location)
 elif record_type_index == 1:
     pub = Advertising(record_type[record_type_index])
     pub.write_to_list_ad(pub_list)
