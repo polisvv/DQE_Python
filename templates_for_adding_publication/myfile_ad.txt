@@ -1,0 +1,3 @@
+Publication_Type: Private Ad
+Body: I want to rent an apartments
+Expiration_Day: 2022-11-01
