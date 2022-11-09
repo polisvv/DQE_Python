@@ -2,6 +2,7 @@ import os
 import random
 import datetime
 import normalization.HT6 as norm
+import typing
 
 
 class Publication:
@@ -19,7 +20,8 @@ class News(Publication):
     def get_publish_date(self):
         return self.publish_datetime.strftime('%Y-%m-%d %H:%M')
 
-    def get_news_location(self):
+    @staticmethod
+    def get_news_location():
         location = input('Type city name: ')
         return location
 
@@ -29,7 +31,8 @@ class Ad(Publication):
         Publication.__init__(self, publication_type=publication_type, publication_body=publication_body)
         self.expiration_date = expiration_date
 
-    def get_due_date(self):
+    @staticmethod
+    def get_due_date():
         print('Type advertising expiration date')
         while True:
             exp_year = int(input('Enter a year: '))
@@ -57,11 +60,12 @@ class Ad(Publication):
 
 
 class Joke(Publication):
-    def __init__(self, publication_type, publication_body:str ="", funny_meter: str = "") -> None:
+    def __init__(self, publication_type, publication_body: str = "", funny_meter: str = "") -> None:
         super().__init__(publication_type=publication_type, publication_body=publication_body)
         self.funny_meter = funny_meter
 
-    def generate_random_funny_meter(self):
+    @staticmethod
+    def generate_random_funny_meter():
         value_list = ['One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten']
         return f'Funny meter – {value_list[random.randint(0, 9)]} of Ten'
 
@@ -75,8 +79,9 @@ class ReaderCli(Reader):
     def __init__(self):
         super().__init__(publication_method="cli")
 
-    def __is_valid_publication_type(self, publication_type):
-        if publication_type not in  ["1", "2", "3"]:
+    @staticmethod
+    def __is_valid_publication_type(publication_type):
+        if publication_type not in ["1", "2", "3"]:
             print('Invalid record type')
         return publication_type
 
@@ -93,11 +98,13 @@ class ReaderCli(Reader):
             else:
                 print("Wrong format. Please try again.")
 
-    def get_publication_text(self):
+    @staticmethod
+    def get_publication_text():
         body = input('Type text: ')
         return body
 
-    def get_publication_specific_info(self, publication: Publication) -> str:
+    @staticmethod
+    def get_publication_specific_info(publication: typing.Union[News, Ad, Joke]) -> None:
         if publication.publication_type == "News":
             publication.location = publication.get_news_location()
         elif publication.publication_type == "Ad":
@@ -134,7 +141,7 @@ class ReaderTxt(Reader):
     def read_from_txt(self):
         with open(f"{self.file_name}") as file:
             input_list = file.readlines()
-            input_list = [row.replace('\n','') for row in input_list]
+            input_list = [row.replace('\n', '') for row in input_list]
         while True:
             if self.__is_valid_txt_format(input_list):
                 return input_list
@@ -157,14 +164,15 @@ class ReaderTxt(Reader):
             print("Your publication type is Joke")
             return Joke(publication_type="Joke")
         else:
-            print(f"Invalid file format. Correct format is:\n\tPublication_Type: \n\tBody: \n\tCity: or Expiration_Day:")
+            print(
+                f"Invalid file format. Correct format is:\n\tPublication_Type: \n\tBody: \n\tCity: or Expiration_Day:")
 
     def get_publication_text(self):
         body = self.input_list[1][self.input_list[1].index(': ') + 2:]
         print(f"Publication text is:\n\t{body}")
         return body
 
-    def get_publication_specific_info(self, publication: Publication) -> str:
+    def get_publication_specific_info(self, publication: typing.Union[News, Ad, Joke]) -> None:
         if publication.publication_type == "News":
             publication.location = self.input_list[2][self.input_list[2].index(': ') + 2:]
             print(f"News location is {publication.location}")
@@ -192,6 +200,7 @@ def get_publication_method():
         else:
             print("Wrong format. Please try again or Ctrl+C to exit.")
 
+
 def write_to_list(publication, body):
     publication_list = []
     publication_list.insert(0, publication.publication_type)
@@ -204,6 +213,7 @@ def write_to_list(publication, body):
         publication_list.insert(2, publication.funny_meter)
     return publication_list
 
+
 def write_to_file(publication_list):
     file = open('myfile.txt', 'a+')
     file.write('---------------------------------' + '\n')
@@ -214,13 +224,15 @@ def write_to_file(publication_list):
 
 reader = get_publication_method()
 
+reader.file_name = ""
+
 if reader.publication_method == "txt":
     reader.file_name = reader.get_file_name()
     reader.input_list = reader.read_from_txt()
 
 pub = reader.get_publication_type()
 pub.publication_body = reader.get_publication_text()
-spec = reader.get_publication_specific_info(pub)
+reader.get_publication_specific_info(pub)
 write_to_file(norm.capitalize_and_append_sent(write_to_list(pub, pub.publication_body)))
 
 if reader.file_name:
